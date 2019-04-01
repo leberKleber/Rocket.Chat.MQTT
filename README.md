@@ -19,10 +19,16 @@ The Following functions are supported:
 ## Direct messaging (not implemented jey)
 |Name|MQTT|Remark|Implemented|
 |----|----|------|-----------|
-|Write to user|Subscribe '<prefix>/direct/{username}'||No|
-|Receive from user|Subscribe '<prefix>/direct/{username}'||No|
+|Write to user|Subscribe '<prefix>/direct/{username}'| |No|
+|Receive from user|Subscribe '<prefix>/direct/{username}'| |No|
 
 ## Quick start
 
-
 ## Configure
+Configurations must be applied via environment variables:
+
+|Name|Description|Example|
+|----|-----------|-------|
+|ROCKET_CHAT_WS_URL|Url to RocketChat websocket| wss://chat.rocket.net/websocket|
+|ROCKET_CHAT_USERNAME|Username to login|leberKleber|
+|ROCKET_CHAT_PASSWORD_HASH|SHA-256 hashed password|4e738ca5563c06cfd0018299933d58db1dd8bf97f6973dc99bf6cdc64b5550bd |

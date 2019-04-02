@@ -8,7 +8,10 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"time"
 )
+
+var incomingMessages = make(map[string][]byte)
 
 type wsMessage struct {
 	MessageType    int
@@ -55,6 +58,8 @@ func (rcc *Client) handleIncoming(msgType int, msgPayload []byte) {
 			if err != nil {
 				log.WithError(err).Error("Failed to send pong")
 			}
+		default:
+			incomingMessages[msg.ID] = msgPayload
 		}
 
 		break
@@ -100,6 +105,22 @@ func (rcc *Client) Start() error {
 	}()
 
 	return rcc.wsConnection.WriteJSON(message.NewConnect())
+}
+
+func (rcc *Client) SendMessage(msg interface{}) error {
+	return rcc.wsConnection.WriteJSON(msg)
+}
+
+func (rcc *Client) SendMessageWaitForResponse(msgID string, msg interface{}) []byte {
+	rcc.SendMessage(msg)
+	for {
+		resp := incomingMessages[msgID]
+		if resp == nil {
+			time.Sleep((1 * time.Second) / 2)
+		} else {
+			return resp
+		}
+	}
 }
 
 func (rcc *Client) Stop() error {

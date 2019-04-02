@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/leberKleber/Rocket.Chat.MQTT/internal/mqtt"
 	"github.com/leberKleber/Rocket.Chat.MQTT/internal/rocketchat"
 	log "github.com/sirupsen/logrus"
 	"os"
@@ -23,9 +24,19 @@ func main() {
 		return
 	}
 
+	mqttClient := mqtt.NewClient(cfg.BrokerURL, cfg.ClientID)
+	defer shutdown(rcClient, mqttClient)
+
 	err = rcClient.Start()
 	if err != nil {
 		log.WithError(err).Fatal("Failed to start rocketChat client")
+		os.Exit(1)
+		return
+	}
+
+	err = mqttClient.Start()
+	if err != nil {
+		log.WithError(err).Fatal("Failed to start mqtt client")
 		os.Exit(1)
 		return
 	}
@@ -37,7 +48,21 @@ func main() {
 		return
 	}
 
+	mqttClient.PublishJSON("Hallo", "hello")
+
 	for {
 		time.Sleep(time.Minute * 5)
+	}
+}
+
+func shutdown(rcClient rocketchat.Client, mqttClient mqtt.MqttClient) {
+	err := rcClient.Stop()
+	if err != nil {
+		log.WithError(err).Error("Error while stopping rocketchat client")
+	}
+
+	err = mqttClient.Stop()
+	if err != nil {
+		log.WithError(err).Error("Error while stopping mqtt client")
 	}
 }

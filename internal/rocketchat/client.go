@@ -51,7 +51,7 @@ func (rcc *Client) handleIncoming(msgType int, msgPayload []byte) {
 		switch msg.Message {
 		case "ping":
 			log.Debug("Send WS pong")
-			err = rcc.wsConnection.WriteJSON(message.NewPong())
+			err = rcc.wsConnection.WriteJSON(message.NewPong()) //RocketChat has a Ping/Ping/Pong flow (Server>Client/Client>Server/Server>Client)
 			if err != nil {
 				log.WithError(err).Error("Failed to send pong")
 			}

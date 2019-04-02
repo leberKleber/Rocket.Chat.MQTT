@@ -32,3 +32,5 @@ Configurations must be applied via environment variables:
 |ROCKET_CHAT_WS_URL|Url to RocketChat websocket| wss://chat.rocket.net/websocket|
 |ROCKET_CHAT_USERNAME|Username to login|leberKleber|
 |ROCKET_CHAT_PASSWORD_HASH|SHA-256 hashed password|4e738ca5563c06cfd0018299933d58db1dd8bf97f6973dc99bf6cdc64b5550bd |
+|MQTT_BROKER_URL|URL to mqtt broker |127.0.0.1:1883|
+|MQTT_CLIENT_ID|MQTT clientID |customClient4711|

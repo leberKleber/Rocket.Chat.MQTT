@@ -2,7 +2,8 @@
 Access RocketChat via MQTT
 
 ![TRAVIS-CI](https://api.travis-ci.org/leberKleber/Rocket.Chat.MQTT.svg?branch=master)
-
+![DOCKER_HUB](https://img.shields.io/docker/pulls/leberkleber/rocket-chat-mqtt.svg)
+![GO-REPORT-CARD](https://goreportcard.com/badge/github.com/leberkleber/rocket.chat.mqtt)
 
 
 # Usage
@@ -20,7 +21,7 @@ The Following functions are supported:
 |Write into public channel|Publish '<prefix>/channel/{channel-name}'|Without autojoin|No|
 |Receive from public channel|Subscribe '<prefix>/channel/{channel-name}'|Without autojoin|No|
 
-## Direct messaging (not implemented yet)
+## Direct messaging (not imhttps://goreportcard.com/badge/github.com/leberkleber/rocket.chat.mqttplemented yet)
 |Name|MQTT|Remark|Implemented|
 |----|----|------|-----------|
 |Write to user|Subscribe '<prefix>/direct/{username}'| |No|

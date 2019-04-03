@@ -1,6 +1,10 @@
 # Rocket.Chat.MQTT
 Access RocketChat via MQTT
 
+![TRAVIS-CI](https://api.travis-ci.org/leberKleber/Rocket.Chat.MQTT.svg?branch=master)
+
+
+
 # Usage
 The Following functions are supported:
 

@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/leberKleber/Rocket.Chat.MQTT/internal/mqtt"
 	"github.com/leberKleber/Rocket.Chat.MQTT/internal/rocketchat"
 	"github.com/leberKleber/Rocket.Chat.MQTT/internal/rocketchat/message"
 	log "github.com/sirupsen/logrus"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -58,20 +60,40 @@ func main() {
 	err = json.Unmarshal(resp, &rresp)
 	log.Info(err)
 
-	var rooms = make(map[string]string)
+	var channels = make(map[string]string)
+	var groups = make(map[string]string)
+	var direct = make(map[string]string)
 
 	for _, r := range rresp.Results {
 		if r.Type == "c" {
-			rooms[r.Name] = r.ID
+			channels[r.Name] = r.ID
+		} else if r.Type == "p" {
+			groups[r.Name] = r.ID
 		}
 	}
 
-	rcClient.SendMessage(message.NewSendMessage(rooms["testav"]))
+	mqttClient.Subscribe("rocketchat/channel/+", func(topicNameAsBytes, messageAsBytes []byte) {
+		tn := string(topicNameAsBytes)
+		m := string(messageAsBytes)
 
-	if resp != nil {
-		log.Info(string(resp))
-	} else {
-		log.Info("NIL response")
+		groupName := strings.Split(tn, "/")[2]
+
+		rcMsg := message.NewSendMessage(channels[groupName], m)
+		rcClient.SendMessage(rcMsg)
+	})
+
+	mqttClient.Subscribe("rocketchat/group/+", func(topicNameAsBytes, messageAsBytes []byte) {
+		tn := string(topicNameAsBytes)
+		m := string(messageAsBytes)
+
+		groupName := strings.Split(tn, "/")[2]
+
+		rcMsg := message.NewSendMessage(groups[groupName], m)
+		rcClient.SendMessage(rcMsg)
+	})
+
+	for k, v := range direct {
+		fmt.Printf("%s --- %s \n", k, v)
 	}
 
 	for {

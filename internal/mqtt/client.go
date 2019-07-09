@@ -41,7 +41,7 @@ func (mc *MqttClient) Stop() error {
 	return err
 }
 
-func (mc *MqttClient) PublishJSON(payload interface{}, relativeTopic string) {
+func (mc *MqttClient) PublishJSON(relativeTopic string, payload interface{}) {
 	bytes, err := json.Marshal(payload)
 	if err != nil {
 		log.WithError(err).Error("Failed to marshal json to publish")
@@ -57,6 +57,18 @@ func (mc *MqttClient) PublishJSON(payload interface{}, relativeTopic string) {
 		log.WithError(err).Error("Failed to publish message")
 		return
 	}
+}
+
+func (mc *MqttClient) Subscribe(relativeTopic string, handler client.MessageHandler) error {
+	return mc.cli.Subscribe(&client.SubscribeOptions{
+		SubReqs: []*client.SubReq{
+			{
+				QoS:         1,
+				TopicFilter: []byte(relativeTopic),
+				Handler:     handler,
+			},
+		},
+	})
 }
 
 func (mc *MqttClient) handleMqttError(err error) {

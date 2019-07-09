@@ -29,7 +29,7 @@ type SendMessageParameters struct {
 	Message string `json:"msg"`
 }
 
-func NewSendMessage(roomID string) SendMessage {
+func NewSendMessage(roomID, message string) SendMessage {
 	return SendMessage{
 		baseMethodMessage: baseMethodMessage{
 			Message: "method",
@@ -38,7 +38,7 @@ func NewSendMessage(roomID string) SendMessage {
 		},
 		Parameters: []SendMessageParameters{
 			{
-				Message: "TestMessage32623462436236",
+				Message: message,
 				RoomID:  roomID,
 				ID:      uuid.New().String(),
 			},

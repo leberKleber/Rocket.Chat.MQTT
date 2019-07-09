@@ -49,7 +49,7 @@ func (rcc *Client) handleIncoming(msgType int, msgPayload []byte) {
 			log.WithError(err).Error("Failed to unmarshal msg payload")
 		}
 
-		log.Infof("Incoming text-message: %v  %v", msg, string(msgPayload))
+		log.Debug("Incoming text-message: %v  %v", msg, string(msgPayload))
 
 		switch msg.Message {
 		case "ping":
